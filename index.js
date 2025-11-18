@@ -1,8 +1,8 @@
 'use strict';
 
 const express = require('express');
-const { isUndefined } = require('util');
 const app = express();
+app.use(express.json());
 
 let categories = ['funnyJoke', 'lameJoke'];
 
@@ -30,6 +30,17 @@ let lameJoke = [
     'response': 'Błyskawiczny kompilator!'
   }
 ];
+
+function determineCategory(categoryString){
+  let category;
+  categoryString = categoryString.toLowerCase();
+  if(categoryString == 'funnyjoke'){
+    category = funnyJoke;
+  } else{
+    category = lameJoke;
+  }
+  return category
+}
 
 app.get('/jokebook/categories', (req, res) => {
 
@@ -66,6 +77,33 @@ app.get('/jokebook/joke/:category', (req,res) => {
   return res.json({joke});
 
 });
+
+app.post('/jokebook/joke/:category', (req, res) =>{
+  const categoryString = req.params.category.toLowerCase();
+  const body = req.body;
+
+  if(categoryString != 'funnyjoke' && categoryString != "lamejoke"){
+    return res.status(401).json({error: `No joke for category ${categoryString}`});
+  }
+  
+  
+  if(categoryString == 'funnyjoke'){
+    funnyJoke.push(body);
+  } else{
+    lameJoke.push(body);
+  }
+  const category = determineCategory(categoryString);
+  console.log(categoryString);
+
+  return res.json(category);
+});
+
+// endpoint do sprawdzania czy post dziaua
+app.get('/:category', (req, res) => {
+  const categoryString = req.params.category;
+  const category = determineCategory(categoryString);
+  return res.json(category);
+})
 
 
 const PORT = process.env.PORT || 3000;
