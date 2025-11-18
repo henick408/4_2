@@ -98,12 +98,18 @@ app.post('/jokebook/joke/:category', (req, res) =>{
   return res.json(category);
 });
 
-// endpoint do sprawdzania czy post dziaua
+// endpoint pomocniczy do sprawdzania czy post dziaua
 app.get('/:category', (req, res) => {
   const categoryString = req.params.category;
   const category = determineCategory(categoryString);
   return res.json(category);
-})
+});
+
+app.get('/jokebook/stats', (req, res) => {
+  const lameLength = lameJoke.length;
+  const funnyLength = funnyJoke.length;
+  return res.json({lameLength, funnyLength});
+});
 
 
 const PORT = process.env.PORT || 3000;
