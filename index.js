@@ -46,9 +46,6 @@ app.get('/jokebook/joke/:category', (req,res) => {
     return res.status(401).json({error: `No joke for category ${categoryString}`});
   }
 
-  console.log(funnyJoke.length);
-  console.log(lameJoke.length);
-
   let categoryLength;
   let category;
 
@@ -61,7 +58,6 @@ app.get('/jokebook/joke/:category', (req,res) => {
     category = lameJoke;
   }
 
-  console.log(categoryLength);
 
   const randomJokeIndex = Math.floor(Math.random() * categoryLength);
 
